@@ -6,7 +6,7 @@
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:09:21 by mteichma          #+#    #+#             */
-/*   Updated: 2025/02/26 11:09:22 by mteichma         ###   ########.fr       */
+/*   Updated: 2025/02/26 11:52:19 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
 		return (1);
 	}
-	pid = atoi(argv[1]);
+	pid = ft_atoi(argv[1]);
 	if (pid <= 0)
 	{
 		ft_printf("Error: Invalid PID\n");

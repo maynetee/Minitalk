@@ -6,7 +6,7 @@
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:09:24 by mteichma          #+#    #+#             */
-/*   Updated: 2025/02/26 11:09:25 by mteichma         ###   ########.fr       */
+/*   Updated: 2025/02/26 11:53:59 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	send_string(int pid, char *str)
 		i++;
 	}
 	send_char(pid, '\0');
+	usleep(100);
 	ft_printf("Message sent and confirmed!\n");
 }
 
@@ -69,7 +70,7 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
 		return (1);
 	}
-	pid = atoi(argv[1]);
+	pid = ft_atoi(argv[1]);
 	if (pid <= 0)
 	{
 		ft_printf("Error: Invalid PID\n");

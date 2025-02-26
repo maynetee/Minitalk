@@ -6,11 +6,11 @@
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 21:13:12 by mteichma          #+#    #+#             */
-/*   Updated: 2024/12/17 23:16:00 by mteichma         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:04:11 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
 int	dispatch_format(char c, va_list args)
 {

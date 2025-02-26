@@ -6,7 +6,7 @@
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:09:15 by mteichma          #+#    #+#             */
-/*   Updated: 2025/02/26 11:09:16 by mteichma         ###   ########.fr       */
+/*   Updated: 2025/02/26 11:52:02 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	handle_signal(int sig, siginfo_t *info, void *context)
 	if (sig == SIGUSR2)
 		current_char |= (1 << bit_index);
 	bit_index++;
+	kill(client_pid, SIGUSR1);
 	if (bit_index == 8)
 	{
 		if (current_char == '\0')
@@ -36,7 +37,6 @@ static void	handle_signal(int sig, siginfo_t *info, void *context)
 		bit_index = 0;
 		current_char = 0;
 	}
-	kill(client_pid, SIGUSR1);
 }
 
 int	main(void)

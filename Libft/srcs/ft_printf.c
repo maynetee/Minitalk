@@ -1,51 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_pointer.c                                :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/14 21:28:36 by mteichma          #+#    #+#             */
-/*   Updated: 2024/12/17 23:49:48 by mteichma         ###   ########.fr       */
+/*   Created: 2024/12/14 21:13:28 by mteichma          #+#    #+#             */
+/*   Updated: 2025/02/01 17:04:24 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
 #include "libft.h"
 
-static int	print_pointer_hex(unsigned long addr, char *base)
+int	print_format(const char *format, va_list args)
 {
-	char	hex[16];
-	int		i;
-	int		count;
+	int	i;
+	int	count;
 
 	i = 0;
-	while (addr > 0)
+	count = 0;
+	while (format[i])
 	{
-		hex[i] = base[addr % 16];
-		addr /= 16;
+		if (format[i] == '%' && format[i + 1])
+		{
+			i++;
+			count += dispatch_format(format[i], args);
+		}
+		else
+		{
+			ft_putchar_fd(format[i], 1);
+			count++;
+		}
 		i++;
-	}
-	count = i;
-	while (i > 0)
-	{
-		i--;
-		ft_putchar_fd(hex[i], 1);
 	}
 	return (count);
 }
 
-int	print_pointer(void *ptr)
+int	ft_printf(const char *format, ...)
 {
-	int	count;
+	va_list	args;
+	int		count;
 
-	if (ptr == NULL)
-	{
-		ft_putstr_fd("(nil)", 1);
-		return (5);
-	}
-	ft_putstr_fd("0x", 1);
-	count = 2;
-	count += print_pointer_hex((unsigned long)ptr, "0123456789abcdef");
+	va_start(args, format);
+	count = print_format(format, args);
+	va_end(args);
 	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: mteichma <mteichma@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 12:39:58 by mteichma          #+#    #+#             */
-/*   Updated: 2024/12/13 18:54:34 by mteichma         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:00:46 by mteichma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 typedef struct s_list
 {
@@ -67,5 +72,23 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+char	**ft_realloc_tab(char **tab, int new_size);
+
+// Printf functions
+int		ft_printf(const char *format, ...);
+int		print_format(const char *format, va_list args);
+int		dispatch_format(char c, va_list args);
+int		print_char(int c);
+int		print_string(char *s);
+int		print_pointer(void *ptr);
+int		print_int(int n);
+int		print_uint(unsigned int n);
+int		print_hex_lower(unsigned int n);
+int		print_hex_upper(unsigned int n);
+int		print_percent(void);
+
+// Get_next_line function
+char	*get_next_line(int fd);
 
 #endif
