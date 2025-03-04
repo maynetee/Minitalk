@@ -23,9 +23,9 @@ static void	handle_signal(int sig)
 	if (bit_index == 8)
 	{
 		if (current_char == '\0')
-			ft_printf("\n");
+			write(1, "\n", 1);
 		else
-			ft_printf("%c", current_char);
+			write(1, &current_char, 1);
 		bit_index = 0;
 		current_char = 0;
 	}

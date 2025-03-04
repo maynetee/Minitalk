@@ -20,18 +20,30 @@ static void	handle_confirmation(int sig)
 	g_received = 1;
 }
 
-static void	send_bit(int pid, int bit)
+static int	send_bit(int pid, int bit)
 {
+	int	result;
+	int	retry;
+
+	retry = 1000;
 	g_received = 0;
 	if (bit == 0)
-		kill(pid, SIGUSR1);
+		result = kill(pid, SIGUSR1);
 	else
-		kill(pid, SIGUSR2);
-	while (!g_received)
-		usleep(10);
+		result = kill(pid, SIGUSR2);
+	if (result == -1)
+		return (-1);
+	while (!g_received && retry > 0)
+	{
+		usleep(250);
+		retry--;
+	}
+	if (!g_received)
+		return (-1);
+	return (0);
 }
 
-static void	send_char(int pid, unsigned char c)
+static int	send_char(int pid, unsigned char c)
 {
 	int	i;
 	int	bit;
@@ -40,24 +52,29 @@ static void	send_char(int pid, unsigned char c)
 	while (i < 8)
 	{
 		bit = (c >> i) & 1;
-		send_bit(pid, bit);
+		if (send_bit(pid, bit) == -1)
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
-static void	send_string(int pid, char *str)
+static int	send_string(int pid, char *str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		send_char(pid, (unsigned char)str[i]);
+		if (send_char(pid, (unsigned char)str[i]) == -1)
+			return (-1);
 		i++;
 	}
-	send_char(pid, '\0');
+	if (send_char(pid, '\0') == -1)
+		return (-1);
 	usleep(100);
 	ft_printf("Message sent and confirmed!\n");
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -80,6 +97,10 @@ int	main(int argc, char **argv)
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
-	send_string(pid, argv[2]);
+	if (send_string(pid, argv[2]) == -1)
+	{
+		ft_printf("Error: Failed to send message to PID %d\n", pid);
+		return (1);
+	}
 	return (0);
 }

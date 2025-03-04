@@ -12,6 +12,26 @@
 
 #include "minitalk.h"
 
+static void	send_confirmation(int client_pid)
+{
+	usleep(500);
+	kill(client_pid, SIGUSR1);
+}
+
+static void	output_current_char(int *bit_index, unsigned char *current_char,
+		int *client_pid)
+{
+	if (*current_char == '\0')
+	{
+		write(1, "\n", 1);
+		*client_pid = 0;
+	}
+	else
+		write(1, current_char, 1);
+	*bit_index = 0;
+	*current_char = 0;
+}
+
 static void	handle_signal(int sig, siginfo_t *info, void *context)
 {
 	static int				bit_index = 0;
@@ -24,19 +44,10 @@ static void	handle_signal(int sig, siginfo_t *info, void *context)
 	if (sig == SIGUSR2)
 		current_char |= (1 << bit_index);
 	bit_index++;
-	kill(client_pid, SIGUSR1);
+	if (client_pid != 0)
+		send_confirmation(client_pid);
 	if (bit_index == 8)
-	{
-		if (current_char == '\0')
-		{
-			ft_printf("\n");
-			client_pid = 0;
-		}
-		else
-			ft_printf("%c", current_char);
-		bit_index = 0;
-		current_char = 0;
-	}
+		output_current_char(&bit_index, &current_char, &client_pid);
 }
 
 int	main(void)
