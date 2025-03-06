@@ -1,36 +1,37 @@
 NAME = client server
-CC = gcc
+CC = clang
 CFLAGS = -Wall -Wextra -Werror
-
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
+
+SRC_CLIENT = client.c
+SRC_SERVER = server.c
+OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+OBJ_SERVER = $(SRC_SERVER:.c=.o)
 
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-client: client.c $(LIBFT)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes client.c $(LIBFT) -o client
+client: $(OBJ_CLIENT) $(LIBFT)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes $(OBJ_CLIENT) $(LIBFT) -o client
 
-server: server.c $(LIBFT)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes server.c $(LIBFT) -o server
+server: $(OBJ_SERVER) $(LIBFT)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes $(OBJ_SERVER) $(LIBFT) -o server
 
-bonus: $(LIBFT) client_bonus server_bonus
+bonus: all
 
-client_bonus: client_bonus.c $(LIBFT)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes client_bonus.c $(LIBFT) -o client_bonus
-
-server_bonus: server_bonus.c $(LIBFT)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR)/includes server_bonus.c $(LIBFT) -o server_bonus
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f *.o
+	rm -f $(OBJ_CLIENT) $(OBJ_SERVER)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -f client server client_bonus server_bonus
+	rm -f client server
 
 re: fclean all
 
