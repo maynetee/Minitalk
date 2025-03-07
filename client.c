@@ -12,7 +12,7 @@
 
 #include "minitalk.h"
 
-static volatile sig_atomic_t	g_ack = 0;
+int	g_ack = 0;
 
 static void	handle_ack(int sig)
 {
